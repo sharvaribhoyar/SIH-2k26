@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar Energy Management System</title>
+<style>
+:root{
+  --bg:#f7f9fc; --bg2:#eef4f8; --panel:#ffffff; --panel2:#f8fbfd;
+  --line:#d9e3ea; --text:#243746; --muted:#667987; --cyan:#1687a7;
+  --blue:#3478b9; --green:#2d9b72; --yellow:#d39a28; --red:#d95362;
+  --shadow:0 8px 24px rgba(36,55,70,.08);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(36,55,70,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(36,55,70,.025) 1px,transparent 1px);background-size:42px 42px;mask-image:linear-gradient(to bottom,black,transparent 80%);opacity:.45}
+a{text-decoration:none;color:inherit}.app{min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;padding:25px 16px;border-right:1px solid var(--line);background:#ffffff;backdrop-filter:blur(22px);z-index:20}.brand{display:flex;gap:12px;align-items:center;padding:5px 10px 30px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#2aa7bd,#3478b9);display:grid;place-items:center;color:#04111c;font-weight:900;box-shadow:0 0 28px rgba(79,220,255,.25)}.brand h1{font-size:19px;margin:0}.brand small{color:var(--muted);font-size:11px}
+.nav-label{font-size:10px;color:#71838e;letter-spacing:1.4px;padding:12px}.nav a{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;color:#526773;margin:3px 0;font-size:14px;transition:.25s}.nav a:hover,.nav a.active{background:linear-gradient(90deg,rgba(79,220,255,.14),rgba(61,140,255,.06));color:white;border:1px solid rgba(79,220,255,.08)}.side-footer{position:absolute;bottom:22px;left:24px;right:24px;border:1px solid var(--line);padding:12px;border-radius:14px;color:var(--muted);font-size:11px}
+main{margin-left:260px;min-height:100vh}.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 36px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.96);backdrop-filter:blur(18px);position:sticky;top:0;z-index:15}.crumb{font-size:13px;color:var(--muted)}.crumb b{color:var(--text)}.actions{display:flex;align-items:center;gap:14px}.iconbtn{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);background:var(--panel);color:white;display:grid;place-items:center}.avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#b7efff,#4d8dff);display:grid;place-items:center;color:#07121f;font-weight:800}
+.page{display:none;padding:36px;max-width:1600px;margin:auto;animation:fade .35s ease}.page.active{display:block}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{min-height:620px;display:grid;grid-template-columns:1.05fr .95fr;gap:38px;align-items:center;position:relative}.eyebrow{color:var(--cyan);font-size:12px;letter-spacing:2px;font-weight:700;text-transform:uppercase}.hero h2{font-size:clamp(42px,5vw,72px);line-height:1.04;margin:18px 0;letter-spacing:-2px}.hero p{font-size:18px;color:#5e707c;line-height:1.7;max-width:680px}.cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}.btn{border:0;border-radius:12px;padding:14px 20px;font-weight:700;cursor:pointer;transition:.25s}.btn.primary{background:var(--cyan);color:#ffffff;box-shadow:0 6px 16px rgba(22,135,167,.18)}.btn.secondary{background:#ffffff;border:1px solid var(--line);color:white}.btn:hover{transform:translateY(-2px)}
+.station{height:460px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(180deg,#eaf7fa,#dcecf3);box-shadow:var(--shadow);position:relative;overflow:hidden}.aurora{position:absolute;inset:0;background:linear-gradient(120deg,transparent 25%,rgba(62,255,202,.15),rgba(79,220,255,.17),transparent 70%);filter:blur(14px);transform:rotate(-12deg);animation:aurora 7s ease-in-out infinite alternate}@keyframes aurora{to{transform:rotate(5deg) translateX(30px)}}.mountain{position:absolute;bottom:0;width:100%;height:40%;background:linear-gradient(135deg,transparent 25%,#b8ccd6 25% 50%,transparent 50%),linear-gradient(45deg,transparent 35%,#9fbac7 35% 65%,transparent 65%);opacity:.85}.station-house{position:absolute;bottom:105px;left:26%;width:210px;height:105px;background:#d8edf4;border-radius:5px;box-shadow:0 0 0 7px rgba(255,255,255,.06)}.station-house:before{content:"";position:absolute;width:125px;height:125px;background:#c9e5ee;transform:rotate(45deg);top:-64px;left:42px}.station-house:after{content:"";position:absolute;inset:18px;background:repeating-linear-gradient(90deg,#0e3449 0 18px,#74d8ef 18px 25px)}.turbine{position:absolute;bottom:100px;width:5px;height:160px;background:#b8e6ee;left:72%}.turbine:before,.turbine:after{content:"";position:absolute;top:0;left:0;width:80px;height:5px;background:#b8e6ee;transform-origin:left center;border-radius:10px}.turbine:before{transform:rotate(25deg)}.turbine:after{transform:rotate(145deg)}.energyline{position:absolute;bottom:68px;left:20%;width:62%;height:2px;background:var(--cyan);box-shadow:0 0 16px var(--cyan);animation:pulse 2s infinite}@keyframes pulse{50%{opacity:.25}}
+.section-title{margin:80px 0 26px}.section-title h2{font-size:32px;margin:8px 0}.section-title p{color:var(--muted);max-width:700px}.grid{display:grid;gap:18px}.features{grid-template-columns:repeat(3,1fr)}.card{background:#ffffff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 10px 30px rgba(0,0,0,.12);backdrop-filter:blur(12px)}.card h3{margin:9px 0;font-size:16px}.card p{margin:0;color:var(--muted);font-size:13px;line-height:1.6}.feature-icon{font-size:23px}
+.process{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.step{padding:22px;border-left:2px solid var(--cyan);background:#f9fbfc}.step b{color:var(--cyan);font-size:12px}.step h3{margin:9px 0}.dash-header{display:flex;justify-content:space-between;align-items:end;margin-bottom:25px}.dash-header h2{margin:6px 0;font-size:31px}.live{color:var(--green);font-size:12px;padding:8px 12px;border-radius:30px;background:rgba(68,224,163,.08);border:1px solid rgba(68,224,163,.16)}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:14px}.kpi .label{font-size:11px;color:var(--muted)}.kpi .value{font-size:25px;font-weight:800;margin:10px 0}.trend{font-size:11px;color:var(--green)}.trend.warn{color:var(--yellow)}.dashboard-grid{display:grid;grid-template-columns:1.6fr .9fr;gap:18px;margin-top:18px}.chart-card{min-height:350px}.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.muted{color:var(--muted);font-size:12px}.tabs button{background:none;border:0;color:var(--muted);padding:7px;cursor:pointer}.tabs button.active{color:var(--cyan);border-bottom:2px solid var(--cyan)}canvas{width:100%;height:270px}.right-stack{display:grid;gap:18px}.battery{height:185px;display:grid;place-items:center}.ring{width:125px;height:125px;border-radius:50%;background:conic-gradient(var(--cyan) 0 78%,#e4edf1 78%);display:grid;place-items:center;position:relative}.ring:before{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:#ffffff}.ring div{position:relative;text-align:center;font-size:28px;font-weight:800}.ring small{display:block;font-size:10px;color:var(--muted);font-weight:500}.status-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}.status-row:last-child{border:0}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px}.green{background:var(--green)}.yellow{background:var(--yellow)}.red{background:var(--red)}
+.page-title{margin-bottom:24px}.page-title h2{font-size:34px;margin:8px 0}.page-title p{color:var(--muted)}.two-col{display:grid;grid-template-columns:1.5fr .9fr;gap:18px}.prediction-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.metric{padding:18px;border:1px solid var(--line);border-radius:16px;background:#f9fbfc}.metric b{font-size:25px;display:block;margin-top:8px}.insight{border-left:3px solid var(--cyan);background:linear-gradient(90deg,rgba(79,220,255,.09),transparent);padding:18px;border-radius:12px}.load-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.load{min-height:230px}.load ul{padding-left:18px;color:var(--muted);line-height:2}.critical{border-top:3px solid var(--red)}.important{border-top:3px solid var(--yellow)}.flexible{border-top:3px solid var(--green)}.weather-cards{grid-template-columns:repeat(5,1fr)}.weather-value{font-size:28px;font-weight:800;margin-top:8px}.alert{display:grid;grid-template-columns:70px 1fr auto;gap:18px;align-items:center;margin-bottom:12px}.severity{font-size:10px;font-weight:800;padding:8px;border-radius:9px;text-align:center}.sev-red{background:rgba(255,107,122,.12);color:var(--red)}.sev-yellow{background:rgba(255,200,87,.12);color:var(--yellow)}.sev-blue{background:rgba(79,220,255,.12);color:var(--cyan)}.emergency{background:linear-gradient(120deg,#fff4f5,#ffffff);border:1px solid rgba(255,107,122,.25);margin-top:20px}.impact{grid-template-columns:repeat(5,1fr)}.impact .num{font-size:28px;font-weight:800;margin:10px 0}.tech-grid{grid-template-columns:repeat(2,1fr)}.tech-list{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.pill{padding:8px 11px;border-radius:30px;background:rgba(79,220,255,.08);border:1px solid rgba(79,220,255,.12);font-size:12px;color:#176d86}.arch{display:flex;align-items:center;justify-content:space-between;gap:8px;overflow:auto;padding:18px 0}.arch-node{min-width:150px;padding:18px;text-align:center;border-radius:15px;background:var(--panel);border:1px solid var(--line);font-size:12px}.arrow{color:var(--cyan)}
+.login-wrap{min-height:calc(100vh - 76px);display:grid;place-items:center}.login{width:min(500px,100%);padding:32px}.role{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:15px 0}.role button{padding:12px 6px;background:#f5f8fa;border:1px solid var(--line);border-radius:11px;color:var(--muted);cursor:pointer;font-size:11px}.role button.selected{border-color:var(--cyan);color:var(--cyan);background:rgba(79,220,255,.07)}input{width:100%;padding:13px 14px;margin:7px 0 13px;border-radius:10px;background:#ffffff;border:1px solid var(--line);color:var(--text)}.chat{position:fixed;right:24px;bottom:24px;width:58px;height:58px;border:0;border-radius:50%;background:linear-gradient(135deg,#2aa7bd,#3478b9);box-shadow:0 12px 35px rgba(79,220,255,.3);font-size:23px;cursor:pointer;z-index:30}.chatbox{display:none;position:fixed;right:24px;bottom:94px;width:340px;max-width:calc(100vw - 30px);background:#ffffff;border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);z-index:30;overflow:hidden}.chatbox.open{display:block}.chat-head{padding:15px;background:linear-gradient(90deg,#edf8fa,transparent);font-weight:800}.chat-msg{padding:16px;color:#5e707c;font-size:13px;line-height:1.6;min-height:115px}.chat-qs{display:flex;flex-wrap:wrap;gap:7px;padding:0 12px 12px}.chat-qs button{font-size:10px;padding:8px;border:1px solid var(--line);background:#f5f8fa;color:#526773;border-radius:9px;cursor:pointer}.toast{position:fixed;top:90px;right:24px;background:#0c2434;border:1px solid var(--line);padding:14px 18px;border-radius:12px;box-shadow:var(--shadow);transform:translateX(150%);transition:.35s;z-index:40}.toast.show{transform:none}
+footer{padding:40px 36px 55px;margin-left:260px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}footer b{color:white}
+.mobile-menu{display:none}
+@media(max-width:1150px){.kpis{grid-template-columns:repeat(3,1fr)}.weather-cards,.impact{grid-template-columns:repeat(3,1fr)}.features{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:850px){.sidebar{transform:translateX(-100%);transition:.3s}.sidebar.open{transform:none}.mobile-menu{display:block}.topbar{padding:0 18px}main,footer{margin-left:0}.page{padding:24px 18px}.hero,.dashboard-grid,.two-col{grid-template-columns:1fr}.hero{padding-top:20px}.station{height:360px}.kpis,.features,.process,.load-grid,.impact,.weather-cards,.prediction-metrics{grid-template-columns:repeat(2,1fr)}.alert{grid-template-columns:60px 1fr}.alert .muted:last-child{display:none}.tech-grid{grid-template-columns:1fr}}
+@media(max-width:520px){.kpis,.features,.process,.load-grid,.impact,.weather-cards,.prediction-metrics{grid-template-columns:1fr}.hero h2{font-size:42px}.page-title h2{font-size:28px}.topbar .crumb{display:none}.station-house{left:18%;transform:scale(.8);transform-origin:bottom left}.turbine{left:78%;transform:scale(.8);transform-origin:bottom}.role{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+<div class="brand"><div class="logo">PG</div><div><h1>Solar Energy Management</h1><small>Intelligent Energy Platform</small></div></div>
+<div class="nav-label">PLATFORM</div>
+<nav class="nav">
+<a href="#home" class="active" onclick="showPage('home',this)">⌂ Home</a>
+<a href="#dashboard" onclick="showPage('dashboard',this)">▦ Dashboard</a>
+<a href="#predictions" onclick="showPage('predictions',this)">◉ AI Predictions</a>
+<a href="#optimization" onclick="showPage('optimization',this)">ϟ Optimization</a>
+<a href="#weather" onclick="showPage('weather',this)">☁ Weather</a>
+<a href="#alerts" onclick="showPage('alerts',this)">⚠ Alerts</a>
+<a href="#sustainability" onclick="showPage('sustainability',this)">♻ Sustainability</a>
+<a href="#technology" onclick="showPage('technology',this)">⌘ Technology</a>
+<div class="nav-label">ACCOUNT</div>
+<a href="#login" onclick="showPage('login',this)">⇥ Login</a>
+</nav>
+<div class="side-footer"><b style="color:#176d86">SIH 2026</b><br>AI-Driven Smart Energy Management for Polar Research Stations</div>
+</aside>
+
+<main>
+<header class="topbar"><div class="actions"><button class="iconbtn mobile-menu" onclick="toggleMenu()">☰</button><div class="crumb">Solar Energy Management / <b id="crumb">Home</b></div></div><div class="actions"><div class="live">● LIVE SIMULATION</div><button class="iconbtn">🔔</button><div class="avatar">SB</div></div></header>
+
+<section id="home" class="page active">
+<div class="hero">
+<div><div class="eyebrow">SIH 2026 • POLAR ENERGY INTELLIGENCE</div><h2>Powering Polar Research with <span style="color:var(--cyan)">Artificial Intelligence.</span></h2><p>An AI-powered smart energy management platform that predicts energy demand, optimizes renewable resources, and ensures reliable power for polar research stations.</p><div class="cta"><button class="btn primary" onclick="showPage('dashboard')">Explore Platform →</button></div></div>
+<div class="station"><div class="aurora"></div><div class="mountain"></div><div class="station-house"></div><div class="turbine"></div><div class="energyline"></div><div style="position:absolute;top:22px;left:22px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:rgba(5,17,28,.55);font-size:11px;color:#526773">ANTARCTICA STATION<br><b style="color:var(--cyan);font-size:15px">SYSTEM ONLINE</b></div></div>
+</div>
+
+<div class="section-title"><div class="eyebrow">THE CHALLENGE</div><h2>Energy challenges in extreme environments</h2><p>Unpredictable weather, limited fuel supply, fluctuating renewable generation and mission-critical loads demand intelligent energy decisions.</p></div>
+<div class="grid features">
+<div class="card"><div class="feature-icon">🌨</div><h3>Extreme Weather</h3><p>Rapid weather changes directly affect renewable generation and heating demand.</p></div>
+<div class="card"><div class="feature-icon">⛽</div><h3>Limited Fuel</h3><p>Diesel transport is expensive and difficult, making optimization essential.</p></div>
+<div class="card"><div class="feature-icon">🫀</div><h3>Critical Reliability</h3><p>Life-support, heating and research operations require uninterrupted power.</p></div>
+</div>
+
+<div class="section-title"><div class="eyebrow">ONE INTELLIGENT ENERGY BRAIN</div><h2>From raw data to autonomous energy decisions</h2></div>
+<div class="process">
+<div class="step"><b>01 — COLLECT</b><h3>IoT Data</h3><p class="muted">Sensors capture energy, battery and environment data.</p></div>
+<div class="step"><b>02 — ANALYZE</b><h3>AI Intelligence</h3><p class="muted">Models analyze consumption patterns and weather.</p></div>
+<div class="step"><b>03 — PREDICT</b><h3>Forecasting</h3><p class="muted">Future demand and renewable availability are predicted.</p></div>
+<div class="step"><b>04 — OPTIMIZE</b><h3>Smart Action</h3><p class="muted">The best energy strategy is recommended in real time.</p></div>
+</div>
+
+<div class="section-title"><div class="eyebrow">CORE CAPABILITIES</div><h2>Built for sustainable polar exploration</h2></div>
+<div class="grid features">
+<div class="card"><div class="feature-icon">🧠</div><h3>AI Energy Forecasting</h3><p>Predict energy shortages before they impact operations.</p></div>
+<div class="card"><div class="feature-icon">⚡</div><h3>Smart Optimization</h3><p>Intelligently balance generation, storage and consumption.</p></div>
+<div class="card"><div class="feature-icon">🔋</div><h3>Predictive Battery Management</h3><p>Determine the best charging and discharging strategy.</p></div>
+</div>
+</section>
+
+<section id="dashboard" class="page">
+<div class="dash-header"><div><div class="eyebrow">MISSION CONTROL</div><h2>Smart Energy Dashboard</h2><p class="muted">Polar Research Station • Antarctica • 14:32 UTC</p></div><div class="live">🟢 STATION STATUS: NORMAL</div></div>
+<div class="kpis">
+<div class="card kpi"><div class="label">TOTAL GENERATED</div><div class="value">842 <small>kWh</small></div><div class="trend">↑ 12.4% today</div></div>
+<div class="card kpi"><div class="label">CURRENT CONSUMPTION</div><div class="value" id="consumption">612 <small>kW</small></div><div class="trend">● Stable</div></div>
+<div class="card kpi"><div class="label">BATTERY STORAGE</div><div class="value">78%</div><div class="trend">Healthy</div></div>
+<div class="card kpi"><div class="label">RENEWABLE SHARE</div><div class="value">64%</div><div class="trend">↑ Optimized</div></div>
+<div class="card kpi"><div class="label">DIESEL GENERATOR</div><div class="value">18%</div><div class="trend warn">Minimized</div></div>
+<div class="card kpi"><div class="label">EFFICIENCY SCORE</div><div class="value">92<span style="color:var(--muted)">/100</span></div><div class="trend">Excellent</div></div>
+</div>
+<div class="dashboard-grid">
+<div class="card chart-card"><div class="card-head"><div><h3>Energy Generation vs Consumption</h3><span class="muted">Real-time energy flow simulation</span></div><div class="tabs"><button class="active">24H</button><button>7D</button><button>30D</button></div></div><canvas id="mainChart"></canvas></div>
+<div class="right-stack">
+<div class="card"><div class="card-head"><h3>Battery Reserve</h3><span class="muted">AI managed</span></div><div class="battery"><div class="ring"><div>78%<small>14h 35m backup</small></div></div></div></div>
+<div class="card"><div class="card-head"><h3>Live System Status</h3><span class="muted">4 systems</span></div><div class="status-row"><span><i class="dot green"></i>Heating Systems</span><b>Operational</b></div><div class="status-row"><span><i class="dot green"></i>Life Support</span><b>Operational</b></div><div class="status-row"><span><i class="dot green"></i>Research Equipment</span><b>Operational</b></div><div class="status-row"><span><i class="dot yellow"></i>Communication</span><b>Moderate Load</b></div></div>
+</div>
+</div>
+</section>
+
+<section id="predictions" class="page">
+<div class="page-title"><div class="eyebrow">MACHINE LEARNING FORECASTING</div><h2>AI Energy Predictions</h2><p>Predictive analytics combining historical consumption, weather patterns and operational context.</p></div>
+<div class="prediction-metrics">
+<div class="metric"><span class="muted">AI MODEL STATUS</span><b style="color:var(--green)">● Active</b></div>
+<div class="metric"><span class="muted">PREDICTION CONFIDENCE</span><b>94.8%</b></div>
+<div class="metric"><span class="muted">FORECAST MODEL</span><b style="font-size:16px">Hybrid Time-Series</b></div>
+</div>
+<div class="two-col" style="margin-top:18px">
+<div class="card chart-card"><div class="card-head"><div><h3>Demand Forecast — Next 24 Hours</h3><span class="muted">Historical vs predicted demand</span></div><div class="tabs"><button class="active">24H</button><button>7 DAYS</button></div></div><canvas id="predictionChart"></canvas></div>
+<div class="grid">
+<div class="card"><h3>Weather Impact</h3><div class="status-row"><span>🌨 Snowfall</span><b>Moderate</b></div><div class="status-row"><span>🌬 Wind Forecast</span><b style="color:var(--green)">Strong</b></div><div class="status-row"><span>☀ Solar Availability</span><b>62%</b></div><div class="status-row"><span>🌡 Temperature</span><b>-24°C</b></div></div>
+<div class="card insight"><div class="eyebrow">ENERGY ASSIST INSIGHT</div><h3>Prepare for evening demand</h3><p>High energy demand is expected between <b>18:00–22:00</b>. Wind generation may decrease by <b>18%</b>. Optimize battery usage and reduce non-essential loads.</p><button class="btn secondary" style="margin-top:15px;padding:10px 14px" onclick="showToast('AI recommendation added to optimization queue.')">Recommended Action →</button></div>
+</div>
+</div>
+</section>
+
+<section id="optimization" class="page">
+<div class="page-title"><div class="eyebrow">AUTONOMOUS DECISION ENGINE</div><h2>Smart Energy Optimization</h2><p>AI-generated strategies prioritize survival-critical infrastructure while minimizing diesel dependency.</p></div>
+<div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:15px"><div><span class="muted">CURRENT OPTIMIZATION SCORE</span><div style="font-size:42px;font-weight:800;color:var(--cyan)">87% <small style="font-size:13px;color:var(--green)">OPTIMIZED</small></div></div><button class="btn primary" onclick="optimize()">⚡ Optimize Energy Now</button></div>
+<div class="load-grid">
+<div class="card load critical"><div class="eyebrow" style="color:var(--red)">🔴 CRITICAL LOADS</div><h3>Always Protected</h3><ul><li>Life Support Systems</li><li>Heating Systems</li><li>Medical Equipment</li><li>Emergency Communications</li></ul></div>
+<div class="card load important"><div class="eyebrow" style="color:var(--yellow)">🟡 IMPORTANT LOADS</div><h3>Managed Intelligently</h3><ul><li>Research Equipment</li><li>Communication Systems</li><li>Data Processing Systems</li><li>Scientific Instruments</li></ul></div>
+<div class="card load flexible"><div class="eyebrow" style="color:var(--green)">🟢 FLEXIBLE LOADS</div><h3>Automatically Adjustable</h3><ul><li>Non-essential Equipment</li><li>Scheduled Systems</li><li>Auxiliary Lighting</li><li>Deferred Processing</li></ul></div>
+</div>
+<div class="section-title"><div class="eyebrow">AI RECOMMENDATIONS</div><h2>Today's optimal energy strategy</h2></div>
+<div class="grid features">
+<div class="card"><h3>🔋 Battery Strategy</h3><p>Charge battery during high wind generation between <b>11:00–15:00</b>.</p></div>
+<div class="card"><h3>⚡ Load Scheduling</h3><p>Delay flexible equipment until renewable availability increases.</p></div>
+<div class="card"><h3>⛽ Generator Optimization</h3><p>Reduce generator operation by an estimated <b>2.4 hours today</b>.</p></div>
+</div>
+</section>
+
+<section id="weather" class="page">
+<div class="page-title"><div class="eyebrow">ENVIRONMENTAL INTELLIGENCE</div><h2>Weather & Renewable Energy</h2><p>Environmental data is continuously translated into renewable generation and demand forecasts.</p></div>
+<div class="grid weather-cards">
+<div class="card"><span>🌡</span><div class="weather-value">−24°C</div><p>Temperature</p></div>
+<div class="card"><span>🌬</span><div class="weather-value">34</div><p>Wind Speed km/h</p></div>
+<div class="card"><span>☀</span><div class="weather-value">420</div><p>Solar Radiation W/m²</p></div>
+<div class="card"><span>🌥</span><div class="weather-value" style="font-size:20px">Partly Cloudy</div><p>Weather Condition</p></div>
+<div class="card"><span>🌨</span><div class="weather-value" style="font-size:20px">Moderate</div><p>Snowfall</p></div>
+</div>
+<div class="two-col" style="margin-top:18px">
+<div class="card chart-card"><div class="card-head"><div><h3>AI Renewable Forecast</h3><span class="muted">Next 24 hours</span></div></div><canvas id="weatherChart"></canvas></div>
+<div class="grid">
+<div class="card"><h3>☀ Solar Generation</h3><div class="weather-value">142 kWh</div><p>Cloud coverage may reduce output later today.</p></div>
+<div class="card"><h3>🌬 Wind Generation</h3><div class="weather-value" style="color:var(--green)">326 kWh</div><p>Strong conditions detected for the next 8 hours.</p></div>
+<div class="card"><h3>⚡ Energy Demand</h3><div class="weather-value" style="color:var(--yellow)">+14%</div><p>Heating demand is increasing due to extreme temperatures.</p></div>
+</div>
+</div>
+</section>
+
+<section id="alerts" class="page">
+<div class="page-title"><div class="eyebrow">PROACTIVE RISK MANAGEMENT</div><h2>Intelligent Alert Center</h2><p>AI identifies operational risks early and recommends the best response.</p></div>
+<div class="card alert"><div class="severity sev-red">HIGH</div><div><h3 style="margin:0">⚠ Battery Level Low</h3><p class="muted">Battery reserve is approaching the recommended safety threshold.</p><small style="color:var(--cyan)">AI Action: Reduce flexible loads and protect battery backup.</small></div><div class="muted">12 min ago</div></div>
+<div class="card alert"><div class="severity sev-yellow">WARNING</div><div><h3 style="margin:0">⚠ High Energy Consumption</h3><p class="muted">Consumption is 18% above the predicted baseline.</p><small style="color:var(--cyan)">AI Action: Identify high-load equipment and defer flexible tasks.</small></div><div class="muted">28 min ago</div></div>
+<div class="card alert"><div class="severity sev-red">CRITICAL</div><div><h3 style="margin:0">⚠ Extreme Weather Warning</h3><p class="muted">Severe snowstorm predicted within 6 hours.</p><small style="color:var(--cyan)">AI Action: Increase battery reserve and prepare emergency mode.</small></div><div class="muted">1 hr ago</div></div>
+<div class="card alert"><div class="severity sev-yellow">WARNING</div><div><h3 style="margin:0">⚠ Renewable Generation Drop</h3><p class="muted">Wind generation decreased unexpectedly.</p><small style="color:var(--cyan)">AI Action: Adjust battery discharge schedule.</small></div><div class="muted">2 hrs ago</div></div>
+<div class="card emergency"><div class="eyebrow" style="color:var(--red)">EMERGENCY CONTROL</div><h2>🚨 Emergency Energy Mode</h2><p class="muted">Protect critical systems, reduce flexible loads, reserve battery capacity and prepare diesel backup.</p><button class="btn primary" onclick="emergency()">Activate Emergency Mode</button></div>
+</section>
+
+<section id="sustainability" class="page">
+<div class="page-title"><div class="eyebrow">MEASURABLE IMPACT</div><h2>Towards Sustainable Polar Exploration</h2><p>Solar Energy Management reduces environmental impact without compromising operational reliability.</p></div>
+<div class="grid impact">
+<div class="card"><span>🌍</span><div class="num">12.8</div><p>Tonnes CO₂ Saved</p></div>
+<div class="card"><span>⛽</span><div class="num">4,250</div><p>Liters Diesel Saved</p></div>
+<div class="card"><span>⚡</span><div class="num">64%</div><p>Renewable Energy</p></div>
+<div class="card"><span>📈</span><div class="num">27%</div><p>Efficiency Improvement</p></div>
+<div class="card"><span>💰</span><div class="num">₹8.4L</div><p>Estimated Savings</p></div>
+</div>
+<div class="two-col" style="margin-top:18px">
+<div class="card chart-card"><div class="card-head"><div><h3>Carbon Reduction Trend</h3><span class="muted">Monthly impact</span></div></div><canvas id="sustainChart"></canvas></div>
+<div class="card"><div class="eyebrow">TRANSFORMATION</div><h2>From diesel dependency to intelligent energy</h2><div class="status-row"><span>Before Solar Energy Management</span><b style="color:var(--red)">High Diesel Dependency</b></div><div class="status-row"><span>After Solar Energy Management</span><b style="color:var(--green)">AI + Renewable Optimization</b></div><div class="insight" style="margin-top:18px"><b>Long-term vision</b><p>Every optimized kilowatt-hour contributes to cleaner, safer and more sustainable scientific exploration.</p></div></div>
+</div>
+</section>
+
+<section id="technology" class="page">
+<div class="page-title"><div class="eyebrow">SYSTEM ARCHITECTURE</div><h2>Technology Behind Solar Energy Management</h2><p>A scalable architecture designed for intelligent monitoring, forecasting and optimization.</p></div>
+<div class="grid tech-grid">
+<div class="card"><h3>🎨 Frontend</h3><div class="tech-list"><span class="pill">React</span><span class="pill">Next.js</span><span class="pill">Tailwind CSS</span><span class="pill">Recharts</span></div></div>
+<div class="card"><h3>⚙ Backend</h3><div class="tech-list"><span class="pill">Node.js</span><span class="pill">Python</span><span class="pill">REST APIs</span></div></div>
+<div class="card"><h3>🧠 Artificial Intelligence</h3><div class="tech-list"><span class="pill">Machine Learning</span><span class="pill">Time Series Forecasting</span><span class="pill">Predictive Analytics</span><span class="pill">Optimization Algorithms</span></div></div>
+<div class="card"><h3>🗄 Data & APIs</h3><div class="tech-list"><span class="pill">Firebase</span><span class="pill">MongoDB</span><span class="pill">Weather API</span><span class="pill">IoT Sensor Data</span></div></div>
+</div>
+<div class="card" style="margin-top:18px"><div class="eyebrow">DATA FLOW</div><div class="arch"><div class="arch-node">📡<br><b>IoT Sensors</b></div><div class="arrow">→</div><div class="arch-node">⚙<br><b>Data Processing</b></div><div class="arrow">→</div><div class="arch-node">🧠<br><b>AI/ML Engine</b></div><div class="arrow">→</div><div class="arch-node">⚡<br><b>Optimization Engine</b></div><div class="arrow">→</div><div class="arch-node">❄️<br><b>PolarGrid Dashboard</b></div></div></div>
+</section>
+
+<section id="login" class="page">
+<div class="login-wrap"><div class="card login"><div class="eyebrow">SECURE ACCESS</div><h2 style="font-size:34px;margin:10px 0">Welcome to Solar Energy Management</h2><p class="muted">Intelligent Energy Management for Extreme Environments</p><label class="muted">Email Address</label><input placeholder="name@polarstation.org"><label class="muted">Password</label><input type="password" placeholder="••••••••"><label class="muted">Select Role</label><div class="role"><button class="selected" onclick="selectRole(this)">👨‍💼<br>Administrator</button><button onclick="selectRole(this)">⚡<br>Energy Manager</button><button onclick="selectRole(this)">🔬<br>Researcher</button></div><div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:15px 0"><span>☑ Remember me</span><span style="color:var(--cyan)">Forgot password?</span></div><button class="btn primary" style="width:100%" onclick="showToast('Demo login successful. Welcome to Solar Energy Management!')">LOGIN TO POLARGRID →</button></div></div>
+</section>
+</main>
+
+<footer><b>Solar Energy Management</b><br>AI-Driven Smart Energy Management for Polar Research Stations<br><br>Built for Smart India Hackathon 2026</footer>
+
+<button class="chat" onclick="toggleChat()">✦</button>
+<div class="chatbox" id="chatbox"><div class="chat-head">✦ ENERGY ASSIST <span style="float:right;color:var(--green);font-size:11px">ONLINE</span></div><div class="chat-msg" id="chatmsg">Hello! I'm ENERGY ASSIST. I can help you understand the station's energy status and recommend actions.</div><div class="chat-qs"><button onclick="askAI('status')">Current status?</button><button onclick="askAI('demand')">When will demand increase?</button><button onclick="askAI('save')">How can we save energy?</button><button onclick="askAI('emergency')">Emergency action?</button></div></div>
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const names={home:'Home',dashboard:'Dashboard',predictions:'AI Predictions',optimization:'Optimization',weather:'Weather',alerts:'Alerts',sustainability:'Sustainability',technology:'Technology',login:'Login'};
+function showPage(id,el){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');
+ document.getElementById('crumb').textContent=names[id];
+ document.querySelectorAll('.nav a').forEach(a=>a.classList.remove('active'));if(el)el.classList.add('active');
+ else {let a=document.querySelector(`.nav a[href="#${id}"]`);if(a)a.classList.add('active')}
+ document.getElementById('sidebar').classList.remove('open');window.scrollTo({top:0,behavior:'smooth'});
+ setTimeout(drawAll,80);
+}
+function toggleMenu(){document.getElementById('sidebar').classList.toggle('open')}
+function showToast(msg){let t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000)}
+function optimize(){showToast('ENERGY ASSIST is calculating the optimal energy strategy...');setTimeout(()=>showToast('Optimization complete: projected diesel use reduced by 11.6%.'),1400)}
+function emergency(){if(confirm('Activate Emergency Energy Mode? Flexible loads will be reduced.'))showToast('🚨 Emergency Energy Mode activated. Critical systems protected.')}
+function selectRole(btn){document.querySelectorAll('.role button').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected')}
+function toggleChat(){document.getElementById('chatbox').classList.toggle('open')}
+function askAI(q){const a={status:'🟢 Current station status is NORMAL. Consumption is 612 kW, battery reserve is 78%, and renewable contribution is 64%.',demand:'📈 Energy demand is expected to peak between 18:00–22:00 due to increased heating and operational load.',save:'⚡ Delay flexible loads, charge batteries during strong wind periods, and minimize generator runtime.',emergency:'🚨 Activate Emergency Energy Mode, protect critical loads, reduce flexible systems, preserve battery reserve and prepare diesel backup.'};document.getElementById('chatmsg').textContent=a[q]}
+function chart(id,sets,labels){
+ const c=document.getElementById(id);if(!c)return;const ctx=c.getContext('2d'),w=c.clientWidth,h=c.clientHeight;c.width=w*devicePixelRatio;c.height=h*devicePixelRatio;ctx.scale(devicePixelRatio,devicePixelRatio);ctx.clearRect(0,0,w,h);
+ const pad=32,max=Math.max(...sets.flatMap(s=>s.data))*1.15;
+ ctx.strokeStyle='rgba(72,94,106,.13)';ctx.lineWidth=1;for(let i=0;i<5;i++){let y=pad+i*(h-pad*2)/4;ctx.beginPath();ctx.moveTo(pad,y);ctx.lineTo(w-pad,y);ctx.stroke()}
+ labels.forEach((l,i)=>{ctx.fillStyle='rgba(82,103,115,.75)';ctx.font='10px sans-serif';ctx.fillText(l,pad+i*(w-pad*2)/(labels.length-1),h-9)})
+ sets.forEach(s=>{ctx.beginPath();s.data.forEach((v,i)=>{let x=pad+i*(w-pad*2)/(s.data.length-1),y=h-pad-(v/max)*(h-pad*2);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.strokeStyle=s.color;ctx.lineWidth=2.5;ctx.shadowColor=s.color;ctx.shadowBlur=8;ctx.stroke();ctx.shadowBlur=0; if(s.dash)ctx.setLineDash([])});
+}
+function drawAll(){
+ chart('mainChart',[
+ {color:'#4fdcff',data:[520,580,610,650,620,690,720,680,700,740,710,760]},
+ {color:'#44e0a3',data:[430,500,560,600,590,640,680,720,690,750,790,842]},
+ {color:'#ffc857',data:[80,110,130,150,170,180,200,170,160,145,130,120]}
+ ],['00','02','04','06','08','10','12','14','16','18','20','22']);
+ chart('predictionChart',[
+ {color:'#8fa9ba',data:[420,440,460,480,520,590,650,690,710,680,650,620]},
+ {color:'#4fdcff',data:[610,630,650,690,740,810,860,900,880,840,760,680]},
+ {color:'#44e0a3',data:[470,500,550,610,680,730,760,740,700,620,560,520]}
+ ],['Now','02','04','06','08','10','12','14','16','18','20','22']);
+ chart('weatherChart',[
+ {color:'#ffc857',data:[60,75,95,120,142,130,110,80,45]},
+ {color:'#4fdcff',data:[220,240,280,326,310,290,260,230,210]}
+ ],['Now','+3h','+6h','+9h','+12h','+15h','+18h','+21h','+24h']);
+ chart('sustainChart',[{color:'#44e0a3',data:[2.1,3.4,4.8,6.5,8.2,10.1,12.8]}],['Mar','Apr','May','Jun','Jul','Aug','Sep']);
+}
+drawAll();window.addEventListener('resize',drawAll);
+setInterval(()=>{let e=document.getElementById('consumption');if(e){let n=608+Math.floor(Math.random()*11);e.innerHTML=n+' <small>kW</small>'}},3500);
+</script>
+</body>
+</html>
